@@ -1,0 +1,44 @@
+<form nz-form [formGroup]="todoForm">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Title</nz-form-label>
+    <nz-form-control 
+      [nzSpan]="24" 
+      nzErrorTip="Please enter a title (minimum 3 characters)"
+    >
+      <input 
+        nz-input 
+        formControlName="title" 
+        placeholder="Enter todo title" 
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Due Date</nz-form-label>
+    <nz-form-control 
+      [nzSpan]="24" 
+      nzErrorTip="Please select a due date"
+    >
+      <nz-date-picker 
+        formControlName="dueDate" 
+        style="width: 100%;"
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Type</nz-form-label>
+    <nz-form-control 
+      [nzSpan]="24" 
+      nzErrorTip="Please select a type"
+    >
+      <nz-select 
+        formControlName="type" 
+        style="width: 100%;"
+      >
+        <nz-option nzValue="Personal" nzLabel="Personal"></nz-option>
+        <nz-option nzValue="Work" nzLabel="Work"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>

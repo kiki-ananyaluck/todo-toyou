@@ -1,0 +1,39 @@
+
+<div class="text-accent w-full">
+  <div class="bg-primary text-accent p-4 flex justify-between items-center">
+    <p class="text-accent text-lg md:text-xl">Todo  🎉</p>
+    
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex gap-4 items-center">
+      <div class="flex gap-4">
+        @for (item of linkList; track item.id) {
+          <a class="text-accent hover:underline" [routerLink]="item.link">{{ item.name }}</a>
+        }
+      </div>
+      <div class="flex gap-4 items-center">
+        @for (icon of iconList; track icon.id) {
+          <nz-icon nzType="{{ icon.icon }}" nzTheme="outline" class="text-xl"/>
+        }
+      </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="md:hidden text-accent" (click)="toggleMobileMenu()">
+      <nz-icon [nzType]="isMobileMenuOpen ? 'close' : 'menu'" nzTheme="outline" class="text-2xl"/>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMobileMenuOpen) {
+    <div class="md:hidden bg-secondary text-accent p-4 flex flex-col gap-4">
+      @for (item of linkList; track item.id) {
+        <a class="text-accent hover:underline py-2" [routerLink]="item.link" (click)="closeMobileMenu()">{{ item.name }}</a>
+      }
+      <div class="flex gap-4 items-center pt-2 border-t border-accent/20">
+        @for (icon of iconList; track icon.id) {
+          <nz-icon nzType="{{ icon.icon }}" nzTheme="outline" class="text-xl"/>
+        }
+      </div>
+    </div>
+  }
+</div>

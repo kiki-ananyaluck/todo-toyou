@@ -1,0 +1,50 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+/* @import "ng-zorro-antd/ng-zorro-antd.min.css"; */
+@import "ng-zorro-antd/ng-zorro-antd.variable.min.css";
+
+
+@theme {
+  --color-primary:  #BC2314;
+  --color-secondary:#BC2314;
+  --color-accent:   #F8F9EF;
+  --color-surface:  #919190;
+  --color-dark:     #444443;
+  --color-light:    #FFFFFF;
+}
+
+:root {
+  --ant-primary-color: var(--color-primary);
+  --ant-primary-color-hover: var(--color-secondary);
+  --ant-primary-color-active: var(--color-dark);
+
+  --ant-success-color: var(--color-accent);
+  --ant-warning-color: var(--color-surface);
+  --ant-error-color: var(--color-dark);
+  --ant-secondary-color: var(--color-light);
+
+  --ant-border-radius-base: 8px;
+}
+
+/* Force Tailwind colors to override Ant Design globally */
+a {
+  color: inherit !important;
+}
+
+a:hover {
+  color: inherit !important;
+}
+
+p {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}

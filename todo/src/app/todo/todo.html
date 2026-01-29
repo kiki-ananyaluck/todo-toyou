@@ -1,0 +1,72 @@
+<div class="">
+  <div class="flex gap-4">
+    <button nz-button nzType="primary" (click)="addTodo()">Add Todo</button>
+    <button nz-button nzType="default" (click)="clearCompleted()">completed</button>
+  </div>
+  <br />
+  <nz-table
+    #rowSelectionTable
+    nzShowPagination
+    nzShowSizeChanger
+    [nzData]="dataTodoTable"
+    [nzFrontPagination]="false"
+    [nzTotal]="total"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzPageSizeOptions]="[5, 10, 20, 50]"
+    (nzPageIndexChange)="onPageIndexChange($event)"
+    (nzPageSizeChange)="onPageSizeChange($event)"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange()"
+  >
+    <thead>
+      <tr>
+        <th
+          nzLabel="Select all"
+          [nzChecked]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+        ></th>
+        @for (col of columns; track col.label) {
+          @if (col.filters && col.filterFn) {
+            <th [nzFilters]="col.filters" [nzFilterFn]="col.filterFn">{{ col.label }}</th>
+          } @else if (col.sortFn) {
+            <th [nzSortFn]="col.sortFn">{{ col.label }}</th>
+          } @else {
+            <th>{{ col.label }}</th>
+          }
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of rowSelectionTable.data; track item.id) {
+        <tr>
+          <td
+            [nzChecked]="setOfCheckedId.has(item.id)"
+            [nzDisabled]="item.completed"
+            [nzLabel]="item.title"
+            (nzCheckedChange)="onItemChecked(item.id, $event)"
+          ></td>
+          @for (col of columns; track col.field) {
+            <td>
+              @switch (col.renderType) {
+                @case ('boolean-tag') {
+                  @if (item[col.field]) {
+                    <nz-tag nzColor="green">Yes</nz-tag>
+                  } @else {
+                    <nz-tag nzColor="red">No</nz-tag>
+                  }
+                }
+                @case ('date') {
+                  {{ item[col.field] }}
+                }
+                @default {
+                  {{ item[col.field] }}
+                }
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody></nz-table
+  >
+</div>

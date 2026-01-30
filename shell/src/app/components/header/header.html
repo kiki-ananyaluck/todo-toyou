@@ -9,7 +9,7 @@
         @for (item of linkList; track item.id) {
           @if (item.submenu) {
             <!-- Dropdown Menu -->
-            <div class="relative">
+            <!-- <div class="relative">
               <button 
                 class="text-accent hover:underline flex items-center gap-1"
                 (click)="toggleDashboardDropdown()"
@@ -19,7 +19,6 @@
                 <nz-icon nzType="down" nzTheme="outline" class="text-sm"/>
               </button>
               
-              <!-- Dropdown Content -->
               @if (isDashboardDropdownOpen) {
                 <div 
                   class="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-48 z-50"
@@ -35,7 +34,7 @@
                   }
                 </div>
               }
-            </div>
+            </div> -->
           } @else {
             <!-- Regular Link -->
             <a class="text-accent hover:underline" [routerLink]="item.link">{{ item.name }}</a>

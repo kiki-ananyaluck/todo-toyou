@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import {  NzTableFilterFn,
+import {
+  NzTableFilterFn,
   NzTableFilterList,
   NzTableModule,
   NzTableSortFn,
-  NzTableSortOrder} from 'ng-zorro-antd/table';
+  NzTableSortOrder,
+} from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { AddTodo } from '../components/modal/add-todo/add-todo';
@@ -30,55 +33,55 @@ interface ColumnConfig {
 
 @Component({
   selector: 'app-todo',
-  imports: [NzButtonModule, NzTableModule, NzTagModule, NzModalModule],
+  imports: [CommonModule, NzButtonModule, NzTableModule, NzTagModule, NzModalModule, DatePipe],
   standalone: true,
   templateUrl: './todo.html',
   styleUrl: './todo.css',
 })
 export class Todo implements OnInit {
-
   constructor(
     private modal: NzModalService,
-    private todoService: TodoService
+    private todoService: TodoService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   columns: ColumnConfig[] = [
-    { 
-      label: 'ID', 
+    {
+      label: 'ID',
       field: 'id',
-      sortFn: (a: TodoItem, b: TodoItem) => a.id.localeCompare(b.id)
+      sortFn: (a: TodoItem, b: TodoItem) => a.id.localeCompare(b.id),
     },
-    { 
-      label: 'Title', 
+    {
+      label: 'Title',
       field: 'title',
-      sortFn: (a: TodoItem, b: TodoItem) => a.title.localeCompare(b.title)
+      sortFn: (a: TodoItem, b: TodoItem) => a.title.localeCompare(b.title),
     },
-    { 
-      label: 'Due Date', 
-      field: 'dueDate', 
+    {
+      label: 'Due Date',
+      field: 'dueDate',
       renderType: 'date',
-      sortFn: (a: TodoItem, b: TodoItem) => a.dueDate.getTime() - b.dueDate.getTime()
+      sortFn: (a: TodoItem, b: TodoItem) => a.dueDate.getTime() - b.dueDate.getTime(),
     },
-    { 
+    {
       label: 'Completed',
       field: 'completed',
       renderType: 'boolean-tag',
       filters: [
         { text: 'Yes', value: true },
-        { text: 'No', value: false }
+        { text: 'No', value: false },
       ],
-      filterFn: (list: boolean[], item: TodoItem) => 
-        list.length > 0 ? list.some(completed => item.completed === completed) : true
+      filterFn: (list: boolean[], item: TodoItem) =>
+        list.length > 0 ? list.some((completed) => item.completed === completed) : true,
     },
-    { 
-      label: 'Type', 
+    {
+      label: 'Type',
       field: 'type',
-      sortFn: (a: TodoItem, b: TodoItem) => a.type.localeCompare(b.type)
-    }
+      sortFn: (a: TodoItem, b: TodoItem) => a.type.localeCompare(b.type),
+    },
   ];
 
   dataTodoTable: TodoItem[] = [];
-  
+
   // Pagination
   pageIndex = 1;
   pageSize = 10;
@@ -86,11 +89,80 @@ export class Todo implements OnInit {
   loading = false;
 
   checked = false;
-  indeterminate = false
+  indeterminate = false;
   setOfCheckedId = new Set<string>();
 
   ngOnInit(): void {
-    this.loadTodos();
+    // this.loadTodos();
+    this.loadMockupTodos();
+  }
+
+  loadMockupTodos(): void {
+    if (this.loading) {
+      console.log('กำลังโหลดอยู่แล้ว ขามการโหลดใหม่');
+      return;
+    }
+
+    console.log('loading', this.loading);
+    this.loading = true;
+    this.cdr.detectChanges();
+    
+    this.todoService.getMockupTodos().subscribe({
+      next: (todos) => {
+        this.dataTodoTable = todos.map((todo: any) => ({
+          id: todo.id,
+          title: todo.title,
+          dueDate: new Date(todo.dueDate),
+          completed: todo.completed ?? false, 
+          type: todo.type,
+          createdAt: new Date(todo.createdAt),
+        }));
+        this.total = todos.length;
+        this.loading = false;
+        this.cdr.detectChanges();
+        console.log('loading', this.loading);
+        console.log('Mockup Todos loaded:', this.dataTodoTable);
+      },
+      error: (error) => {
+        console.error('Error loading mockup todos:', error);
+        this.loading = false;
+        this.cdr.detectChanges();
+        // ถ้า API ไม่ทำงาน ใช้ข้อมูลจำลอง
+        this.loadFallbackData();
+      },
+    });
+  }
+
+  loadFallbackData(): void {
+    // ข้อมูลจำลองสำหรับกรณี API ไม่ทำงาน
+    this.dataTodoTable = [
+      {
+        id: '1',
+        title: 'Sample Todo 1',
+        dueDate: new Date('2026-02-15'),
+        completed: false,
+        type: 'Work',
+        createdAt: new Date('2026-01-30'),
+      },
+      {
+        id: '2',
+        title: 'Sample Todo 2',
+        dueDate: new Date('2026-02-20'),
+        completed: true,
+        type: 'Personal',
+        createdAt: new Date('2026-01-29'),
+      },
+      {
+        id: '3',
+        title: 'Sample Todo 3',
+        dueDate: new Date('2026-02-25'),
+        completed: false,
+        type: 'Work',
+        createdAt: new Date('2026-01-28'),
+      },
+    ];
+    this.total = this.dataTodoTable.length;
+    console.log('Fallback data loaded:', this.dataTodoTable);
   }
 
   loadTodos(pageIndex: number = this.pageIndex, pageSize: number = this.pageSize): void {
@@ -103,7 +175,7 @@ export class Todo implements OnInit {
           dueDate: new Date(todo.dueDate),
           completed: todo.isCompleted ?? false,
           type: todo.type,
-          createdAt: new Date(todo.createdAt)
+          createdAt: new Date(todo.createdAt),
         }));
         this.total = response.result.totalCount;
         this.pageIndex = response.result.pageNumber;
@@ -114,7 +186,7 @@ export class Todo implements OnInit {
       error: (error) => {
         console.error('Error loading todos:', error);
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -127,21 +199,22 @@ export class Todo implements OnInit {
     this.loadTodos(1, pageSize);
   }
 
-
   onCurrentPageDataChange(): void {
     this.refreshCheckedStatus();
   }
 
   onAllChecked(checked: boolean): void {
-    this.dataTodoTable.filter(item => !item.completed).forEach(({ id }) => {
-      if (id !== undefined) {
-        if (checked) {
-          this.setOfCheckedId.add(id);
-        } else {
-          this.setOfCheckedId.delete(id);
+    this.dataTodoTable
+      .filter((item) => !item.completed)
+      .forEach(({ id }) => {
+        if (id !== undefined) {
+          if (checked) {
+            this.setOfCheckedId.add(id);
+          } else {
+            this.setOfCheckedId.delete(id);
+          }
         }
-      }
-    });
+      });
     this.refreshCheckedStatus();
   }
 
@@ -156,10 +229,13 @@ export class Todo implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    const listOfEnabledData = this.dataTodoTable.filter(item => !item.completed);
-    this.checked = listOfEnabledData.every(item => item.id !== undefined && this.setOfCheckedId.has(item.id));
-    this.indeterminate = 
-      listOfEnabledData.some(item => item.id !== undefined && this.setOfCheckedId.has(item.id)) && !this.checked;
+    const listOfEnabledData = this.dataTodoTable.filter((item) => !item.completed);
+    this.checked = listOfEnabledData.every(
+      (item) => item.id !== undefined && this.setOfCheckedId.has(item.id),
+    );
+    this.indeterminate =
+      listOfEnabledData.some((item) => item.id !== undefined && this.setOfCheckedId.has(item.id)) &&
+      !this.checked;
   }
 
   addTodo(): void {
@@ -169,7 +245,7 @@ export class Todo implements OnInit {
       nzFooter: [
         {
           label: 'Cancel',
-          onClick: () => modalRef.destroy()
+          onClick: () => modalRef.destroy(),
         },
         {
           label: 'Add',
@@ -178,13 +254,13 @@ export class Todo implements OnInit {
             if (!componentInstance?.isValid()) {
               return;
             }
-            
+
             const newTodo = {
               title: componentInstance?.title || 'New Todo',
-              dueDate: componentInstance?.dueDate ? 
-                new Date(componentInstance.dueDate).toISOString() : 
-                new Date().toISOString(),
-              type: componentInstance?.type || 'Personal'
+              dueDate: componentInstance?.dueDate
+                ? new Date(componentInstance.dueDate).toISOString()
+                : new Date().toISOString(),
+              type: componentInstance?.type || 'Personal',
             };
 
             this.todoService.createTodo(newTodo).subscribe({
@@ -196,21 +272,21 @@ export class Todo implements OnInit {
               error: (error) => {
                 console.error('Error creating todo:', error);
                 // You can add error notification here
-              }
+              },
             });
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   }
 
   clearCompleted(): void {
-    this.dataTodoTable = this.dataTodoTable.filter(item => !item.completed);
+    this.dataTodoTable = this.dataTodoTable.filter((item) => !item.completed);
     this.setOfCheckedId.clear();
     this.refreshCheckedStatus();
   }
 
-  see(): void{
+  see(): void {
     console.log('test');
   }
 }

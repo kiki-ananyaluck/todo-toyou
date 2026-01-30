@@ -36,6 +36,61 @@ a:hover {
   color: inherit !important;
 }
 
+/* Remove Ant Design hover effects and override colors */
+.ant-input {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-input:hover {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+}
+
+.ant-input:focus,
+.ant-input-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 !important;
+  outline: none !important;
+}
+
+.ant-btn:hover {
+  color: inherit !important;
+  background-color: inherit !important;
+  border-color: inherit !important;
+}
+
+.ant-select-selector {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-select-selector:hover {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-select:hover .ant-select-selector {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(188, 35, 20, 0.1) !important;
+}
+
+.ant-picker {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-picker:hover {
+  border-color: #d9d9d9 !important;
+}
+
+.ant-picker:focus,
+.ant-picker-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(188, 35, 20, 0.1) !important;
+}
+
 p {
   padding: 0 !important;
   margin: 0 !important;

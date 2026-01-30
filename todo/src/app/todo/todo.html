@@ -9,11 +9,10 @@
     nzShowPagination
     nzShowSizeChanger
     [nzData]="dataTodoTable"
-    [nzFrontPagination]="false"
+    [nzLoading]="loading"
     [nzTotal]="total"
     [nzPageSize]="pageSize"
     [nzPageIndex]="pageIndex"
-    [nzPageSizeOptions]="[5, 10, 20, 50]"
     (nzPageIndexChange)="onPageIndexChange($event)"
     (nzPageSizeChange)="onPageSizeChange($event)"
     (nzCurrentPageDataChange)="onCurrentPageDataChange()"
@@ -37,36 +36,30 @@
         }
       </tr>
     </thead>
-    <tbody>
-      @for (item of rowSelectionTable.data; track item.id) {
-        <tr>
-          <td
-            [nzChecked]="setOfCheckedId.has(item.id)"
-            [nzDisabled]="item.completed"
-            [nzLabel]="item.title"
-            (nzCheckedChange)="onItemChecked(item.id, $event)"
-          ></td>
-          @for (col of columns; track col.field) {
-            <td>
-              @switch (col.renderType) {
-                @case ('boolean-tag') {
-                  @if (item[col.field]) {
-                    <nz-tag nzColor="green">Yes</nz-tag>
-                  } @else {
-                    <nz-tag nzColor="red">No</nz-tag>
-                  }
-                }
-                @case ('date') {
-                  {{ item[col.field] }}
-                }
-                @default {
-                  {{ item[col.field] }}
-                }
-              }
-            </td>
+<tbody>
+  @for (data of dataTodoTable; track data.id) {
+    <tr>
+      <td nzShowCheckbox [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+      @for (col of columns; track col.label) {
+        <td>
+          @switch (col.renderType) {
+            @case ('boolean-tag') {
+              <nz-tag [nzColor]="data[col.field] ? 'green' : 'red'">
+                {{ data[col.field] ? 'Yes' : 'No' }}
+              </nz-tag>
+            }
+            @case ('date') {
+              {{ data[col.field] }}
+            }
+            @default {
+              {{ data[col.field] }}
+            }
           }
-        </tr>
+        </td>
       }
-    </tbody></nz-table
+    </tr>
+  }
+</tbody>
+    </nz-table
   >
 </div>

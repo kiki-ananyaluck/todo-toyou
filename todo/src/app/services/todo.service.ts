@@ -33,9 +33,13 @@ export interface ApiResponse<T> {
 })
 export class TodoService {
   private apiUrl = `${environment.apiUrl}/todos`;
+  private mockApiUrl = 'https://696ddfbdd7bacd2dd714d27b.mockapi.io/todo';
 
   constructor(private http: HttpClient) {}
 
+  getMockupTodos(): Observable<TodoDto[]> {
+    return this.http.get<TodoDto[]>(this.mockApiUrl);
+  }
   /**
    * Get all todos with pagination
    */

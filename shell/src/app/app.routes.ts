@@ -10,5 +10,14 @@ export const routes: Routes = [
                 remoteEntry: 'http://localhost:4201/remoteEntry.js',
                 exposedModule: './TodoModule'
             }).then(m => m.remoteRoutes)
-        }
+    },
+    {
+        path: 'dashboard',
+        loadChildren: () => 
+            loadRemoteModule({
+                type: 'module',
+                remoteEntry: 'http://localhost:4202/remoteEntry.js',
+                exposedModule: './Routes'
+            }).then(m => m.remoteRoutes)
+    }
 ];

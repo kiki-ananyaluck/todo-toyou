@@ -5,9 +5,41 @@
     
     <!-- Desktop Menu -->
     <div class="hidden md:flex gap-4 items-center">
-      <div class="flex gap-4">
+      <div class="flex gap-4 items-center">
         @for (item of linkList; track item.id) {
-          <a class="text-accent hover:underline" [routerLink]="item.link">{{ item.name }}</a>
+          @if (item.submenu) {
+            <!-- Dropdown Menu -->
+            <div class="relative">
+              <button 
+                class="text-accent hover:underline flex items-center gap-1"
+                (click)="toggleDashboardDropdown()"
+                (mouseenter)="isDashboardDropdownOpen = true"
+                (mouseleave)="isDashboardDropdownOpen = false">
+                {{ item.name }}
+                <nz-icon nzType="down" nzTheme="outline" class="text-sm"/>
+              </button>
+              
+              <!-- Dropdown Content -->
+              @if (isDashboardDropdownOpen) {
+                <div 
+                  class="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg min-w-48 z-50"
+                  (mouseenter)="isDashboardDropdownOpen = true"
+                  (mouseleave)="closeDashboardDropdown()">
+                  @for (subItem of item.submenu; track subItem.id) {
+                    <a 
+                      class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      [routerLink]="subItem.link"
+                      (click)="closeDashboardDropdown()">
+                      {{ subItem.name }}
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <!-- Regular Link -->
+            <a class="text-accent hover:underline" [routerLink]="item.link">{{ item.name }}</a>
+          }
         }
       </div>
       <div class="flex gap-4 items-center">
@@ -27,7 +59,32 @@
   @if (isMobileMenuOpen) {
     <div class="md:hidden bg-secondary text-accent p-4 flex flex-col gap-4">
       @for (item of linkList; track item.id) {
-        <a class="text-accent hover:underline py-2" [routerLink]="item.link" (click)="closeMobileMenu()">{{ item.name }}</a>
+        @if (item.submenu) {
+          <!-- Mobile Dropdown -->
+          <div>
+            <button 
+              class="text-accent hover:underline py-2 w-full text-left flex items-center justify-between"
+              (click)="toggleDashboardDropdown()">
+              {{ item.name }}
+              <nz-icon [nzType]="isDashboardDropdownOpen ? 'up' : 'down'" nzTheme="outline" class="text-sm"/>
+            </button>
+            @if (isDashboardDropdownOpen) {
+              <div class="ml-4 mt-2 space-y-2">
+                @for (subItem of item.submenu; track subItem.id) {
+                  <a 
+                    class="block text-accent hover:underline py-1"
+                    [routerLink]="subItem.link"
+                    (click)="closeMobileMenu()">
+                    {{ subItem.name }}
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Regular Mobile Link -->
+          <a class="text-accent hover:underline py-2" [routerLink]="item.link" (click)="closeMobileMenu()">{{ item.name }}</a>
+        }
       }
       <div class="flex gap-4 items-center pt-2 border-t border-accent/20">
         @for (icon of iconList; track icon.id) {

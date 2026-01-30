@@ -11,12 +11,21 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 export class Header {
 
   isMobileMenuOpen = false;
+  isDashboardDropdownOpen = false;
 
-  linkList: Array<{ id: number; link: string; name: string }> = [
+  linkList: Array<{ id: number; link: string; name: string; submenu?: Array<{ id: number; link: string; name: string }> }> = [
     { id: 1 ,link: '/', name: 'Home' },
     { id: 2, link: '/todo', name: 'Todo' },
-    { id: 3, link: '/about', name: 'About' },
-    { id: 4, link: '/contact', name: 'Contact' },
+    { 
+      id: 4, 
+      link: '/dashboard', 
+      name: 'Dashboard',
+      submenu: [
+        { id: 41, link: '/dashboard/weekly', name: 'Weekly View' },
+        { id: 42, link: '/dashboard/all', name: 'All Tasks' }
+      ]
+    },
+    { id: 5, link: '/contact', name: 'Contact' },
   ];
 
   iconList: Array<{ id: number; link: string; icon: string }> = [
@@ -30,6 +39,14 @@ export class Header {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  toggleDashboardDropdown() {
+    this.isDashboardDropdownOpen = !this.isDashboardDropdownOpen;
+  }
+
+  closeDashboardDropdown() {
+    this.isDashboardDropdownOpen = false;
   }
 
 }

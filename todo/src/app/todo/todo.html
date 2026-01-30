@@ -4,62 +4,13 @@
     <button nz-button nzType="default" (click)="clearCompleted()">completed</button>
   </div>
   <br />
-  <nz-table
-    #rowSelectionTable
-    nzShowPagination
-    nzShowSizeChanger
-    [nzData]="dataTodoTable"
-    [nzLoading]="loading"
-    [nzTotal]="total"
-    [nzPageSize]="pageSize"
-    [nzPageIndex]="pageIndex"
-    (nzPageIndexChange)="onPageIndexChange($event)"
-    (nzPageSizeChange)="onPageSizeChange($event)"
-    (nzCurrentPageDataChange)="onCurrentPageDataChange()"
-  >
-    <thead>
-      <tr>
-        <th
-          nzLabel="Select all"
-          [nzChecked]="checked"
-          [nzIndeterminate]="indeterminate"
-          (nzCheckedChange)="onAllChecked($event)"
-        ></th>
-        @for (col of columns; track col.label) {
-          @if (col.filters && col.filterFn) {
-            <th [nzFilters]="col.filters" [nzFilterFn]="col.filterFn">{{ col.label }}</th>
-          } @else if (col.sortFn) {
-            <th [nzSortFn]="col.sortFn">{{ col.label }}</th>
-          } @else {
-            <th>{{ col.label }}</th>
-          }
-        }
-      </tr>
-    </thead>
-<tbody>
-  @for (data of dataTodoTable; track data.id) {
-    <tr>
-      <td nzShowCheckbox [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-      @for (col of columns; track col.label) {
-        <td>
-          @switch (col.renderType) {
-            @case ('boolean-tag') {
-              <nz-tag [nzColor]="data[col.field] ? 'green' : 'red'">
-                {{ data[col.field] ? 'Yes' : 'No' }}
-              </nz-tag>
-            }
-            @case ('date') {
-              {{ data[col.field] }}
-            }
-            @default {
-              {{ data[col.field] }}
-            }
-          }
-        </td>
-      }
-    </tr>
-  }
-</tbody>
-    </nz-table
-  >
+  <app-shared-table 
+    [config]="tableConfig"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    (currentPageDataChange)="onCurrentPageDataChange($event)"
+    (itemChecked)="onItemChecked($event)"
+    (allChecked)="onAllChecked($event)"
+  ></app-shared-table>
 </div>
+ <p class="bg-green-600">test</p>

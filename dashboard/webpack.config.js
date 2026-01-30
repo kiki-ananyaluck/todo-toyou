@@ -6,10 +6,16 @@ module.exports = withModuleFederationPlugin({
 
   exposes: {
     './Component': './src/app/app.ts',
+    './Routes': './src/app/app.routes.ts',
   },
 
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    ...shareAll({ 
+      singleton: true, 
+      strictVersion: false, 
+      requiredVersion: false,
+      eager: false 
+    }),
   },
 
 });

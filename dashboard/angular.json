@@ -2,7 +2,8 @@
 	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
 	"version": 1,
 	"cli": {
-		"packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": false
 	},
 	"newProjectRoot": "projects",
 	"projects": {
@@ -73,7 +74,9 @@
 					"options": {
 						"port": 4202,
 						"publicHost": "http://localhost:4202",
-						"extraWebpackConfig": "webpack.config.js"
+						"extraWebpackConfig": "webpack.config.js",
+						"liveReload": false,
+						"hmr": false
 					}
 				},
 				"test": {

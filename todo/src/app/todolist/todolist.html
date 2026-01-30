@@ -1,2 +1,17 @@
 
- <p class="bg-green-600">test</p>
+<!-- แบบใช้ component -->
+<div class="">
+  <div class="flex gap-4">
+    <!-- <button nz-button nzType="primary" (click)="addTodo()">Add Todo</button>
+    <button nz-button nzType="default" (click)="clearCompleted()">completed</button> -->
+  </div>
+  <br />
+  <app-shared-table 
+    [config]="tableConfig"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    (currentPageDataChange)="onCurrentPageDataChange($event)"
+    (itemChecked)="onItemChecked($event)"
+    (allChecked)="onAllChecked($event)"
+  ></app-shared-table>
+</div>
